@@ -5,5 +5,5 @@ listener "tcp" {
 ui = true
 
 storage "file" {
-  bucket = "/data"
+  path = "/data"
 }
