@@ -1,0 +1,17 @@
+[Match]
+Name=enp*
+Name=eth*
+
+{% set id = lookup('hashi_vault', 'secret=cassiecluster/nextdns:id') %}
+[Network]
+DHCP=ipv4
+DNS=45.90.28.0#{{ ansible_nodename }}-{{ id }}.dns1.nextdns.io
+DNS=2a07:a8c0::#{{ ansible_nodename }}-{{ id }}.dns1.nextdns.io
+DNS=45.90.30.0#{{ ansible_nodename }}-{{ id }}.dns2.nextdns.io
+DNS=2a07:a8c1::#{{ ansible_nodename }}-{{ id }}.dns2.nextdns.io
+DNSOverTLS=yes
+DNSSEC=yes
+
+[DHCPv4]
+UseMTU=yes
+UseDNS=no

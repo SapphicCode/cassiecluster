@@ -1,0 +1,73 @@
+- hosts: all
+  become: yes
+  handlers:
+    - name: Restart systemd-timesyncd
+      systemd:
+        name: systemd-timesyncd
+        state: restarted
+    - name: Restart systemd-resolved
+      systemd:
+        name: systemd-resolved
+        state: restarted
+    - name: Restart systemd-networkd
+      systemd:
+        name: systemd-networkd
+        state: restarted
+  tasks:
+    - name: Link timezone
+      file:
+        path: /etc/localtime
+        src: /usr/share/zoneinfo/{{ tz }}
+        state: link
+        follow: no
+        force: yes
+    - name: Configure systemd-timesyncd
+      copy:
+        src: ../configs/systemd/timesyncd.conf
+        dest: /etc/systemd/timesyncd.conf
+      notify:
+        - Restart systemd-timesyncd
+    - name: Enable systemd-timesyncd
+      systemd:
+        name: systemd-timesyncd
+        enabled: yes
+        state: started
+
+    - name: Configure systemd-resolved
+      copy:
+        src: ../configs/systemd/resolved.conf
+        dest: /etc/systemd/resolved.conf
+        mode: ug=rw,o=r
+      notify:
+        - Restart systemd-resolved
+    - name: Link systemd-resolved to /etc/resolv.conf
+      file:
+        path: /etc/resolv.conf
+        src: /run/systemd/resolve/stub-resolv.conf
+        state: link
+        follow: no
+        force: yes
+    - name: Enable systemd-resolved
+      systemd:
+        name: systemd-resolved
+        enabled: yes
+        state: started
+
+    - name: Yeet netplan.io
+      apt:
+        name: netplan.io
+        state: absent
+        autoremove: yes
+      when: ansible_facts['distribution'] == 'Ubuntu'
+    - name: Configure systemd-networkd WAN
+      template:
+        src: ../configs/systemd/network/wan.network.j2
+        dest: /etc/systemd/network/wan.network
+        mode: ug=rw,o=r
+      notify:
+        - Restart systemd-networkd
+    - name: Enable systemd-networkd
+      systemd:
+        name: systemd-networkd
+        enabled: yes
+        state: started
