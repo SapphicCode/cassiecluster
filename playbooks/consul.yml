@@ -1,0 +1,71 @@
+- hosts: all
+  become: yes
+  vars:
+    target_version: "1.8.3"
+  handlers:
+    - name: Restart Consul
+      systemd:
+        name: consul
+        state: restarted
+  tasks:
+    - name: Get Consul version
+      command: consul version
+      register: version
+      changed_when: version.failed or target_version not in version.stdout
+      failed_when: no
+    - name: Update Consul
+      when: version.changed
+      unarchive:
+        remote_src: yes
+        src: https://releases.hashicorp.com/consul/{{ target_version }}/consul_{{ target_version }}_linux_{{ 'amd64' if ansible_architecture == 'x86_64' else ansible_architecture }}.zip
+        dest: /usr/local/bin/
+      notify:
+        - Restart Consul
+
+    - name: Create /etc/consul.d
+      file:
+        path: /etc/consul.d
+        state: directory
+        mode: ug=rwx,o=rx
+
+    - name: Copy Consul generic config
+      copy:
+        src: ../configs/consul/general.hcl
+        dest: /etc/consul.d/
+        mode: ug=rw,o=r
+      notify:
+        - Restart Consul
+    - name: Template Consul client config
+      template:
+        src: ../configs/consul/client.hcl.j2
+        dest: /etc/consul.d/client.hcl
+        mode: ug=rw,o=r
+      notify:
+        - Restart Consul
+
+    - name: Template Consul server config
+      when: manager
+      template:
+        src: ../configs/consul/server.hcl.j2
+        dest: /etc/consul.d/server.hcl
+        mode: ug=rw,o=r
+      notify:
+        - Restart Consul
+    - name: Disable Consul server config
+      when: not manager
+      file:
+        path: /etc/consul.d/server.hcl
+        state: absent
+      notify:
+        - Restart Consul
+
+    - name: Copy Consul unit
+      copy:
+        src: ../configs/systemd/units/consul.service
+        dest: /etc/systemd/system/
+        mode: ug=rw,o=r
+    - name: Enable Consul
+      systemd:
+        name: consul
+        enabled: yes
+        state: started

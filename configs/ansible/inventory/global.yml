@@ -4,4 +4,7 @@ all:
     lighthouse: no
     dc: cloud
     tz: UTC
-    ansible_python_interpreter: auto
+    bootstrap:
+      consul: 1
+      nomad: 2
+    ansible_python_interpreter: auto_silent

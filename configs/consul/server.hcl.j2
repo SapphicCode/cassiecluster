@@ -1,0 +1,7 @@
+server = true
+bootstrap_expect = {{ bootstrap.consul }}
+retry_join_wan = [
+{% for host, data in hostvars.items() if data.get('ansible_nebula1') and data.manager %}
+  "{{ data.ansible_nebula1.ipv4.address }}", # {{ host }}
+{% endfor %}
+]

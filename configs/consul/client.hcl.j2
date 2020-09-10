@@ -1,0 +1,7 @@
+ui = true
+retry_join = [
+{% for host, data in hostvars.items() if data.get('ansible_nebula1') and data.manager and data.dc == dc %}
+  "{{ data.ansible_nebula1.ipv4.address }}", # {{ host }}
+{% endfor %}
+]
+datacenter = "{{ dc }}"
