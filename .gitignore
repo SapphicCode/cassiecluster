@@ -1,2 +1,2 @@
 config/nebula/*.key
-config/systemd/resolved.conf.j2
+config/systemd/network/wan.network.j2

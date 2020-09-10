@@ -1,0 +1,7 @@
+all:
+  vars:
+    manager: no
+    lighthouse: no
+    dc: cloud
+    tz: UTC
+    ansible_python_interpreter: auto
