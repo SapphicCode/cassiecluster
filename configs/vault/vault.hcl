@@ -4,6 +4,4 @@ listener "tcp" {
 }
 ui = true
 
-storage "file" {
-  path = "/data"
-}
+storage "consul" {}
