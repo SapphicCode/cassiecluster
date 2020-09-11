@@ -1,7 +1,7 @@
 - hosts: all
   become: yes
   vars:
-    target_version: "1.8.3"
+    target_version: "1.8.4"
   handlers:
     - name: Restart Consul
       systemd:
