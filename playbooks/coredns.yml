@@ -1,0 +1,52 @@
+- hosts: all
+  become: yes
+  vars:
+    target_version: "1.7.0"
+  handlers:
+    - name: Reload CoreDNS
+      systemd:
+        name: coredns
+        state: reloaded
+    - name: Restart CoreDNS
+      systemd:
+        name: coredns
+        state: restarted
+  tasks:
+    # Install
+    - name: Get CoreDNS version
+      command: coredns -version
+      register: version
+      changed_when: version.failed or target_version not in version.stdout
+      failed_when: no
+    - name: Update CoreDNS
+      when: version.changed
+      unarchive:
+        remote_src: yes
+        src: https://github.com/coredns/coredns/releases/download/v{{ target_version }}/coredns_{{ target_version }}_linux_{{ 'amd64' if ansible_architecture == 'x86_64' else ansible_architecture }}.tgz
+        dest: /usr/local/bin/
+      notify: Restart CoreDNS
+
+    # Configure
+    - name: Create /etc/coredns
+      file:
+        path: /etc/coredns
+        state: directory
+        mode: ug=rwx,o=rx
+    - name: Configure CoreDNS
+      template:
+        src: ../configs/coredns/Corefile.j2
+        dest: /etc/coredns/Corefile
+        mode: ug=rw,o=r
+      notify: Reload CoreDNS
+
+    # Install to systemd
+    - name: Copy systemd unit
+      copy:
+        src: ../configs/systemd/units/coredns.service
+        dest: /etc/systemd/system/coredns.service
+        mode: ug=rw,o=r
+    - name: Enable CoreDNS
+      systemd:
+        name: coredns
+        enabled: yes
+        state: started
