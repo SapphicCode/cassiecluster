@@ -60,8 +60,8 @@
         autoremove: yes
       when: ansible_facts['distribution'] == 'Ubuntu'
     - name: Configure systemd-networkd WAN
-      template:
-        src: ../configs/systemd/network/wan.network.j2
+      copy:
+        src: ../configs/systemd/network/wan.network
         dest: /etc/systemd/network/wan.network
         mode: ug=rw,o=r
       notify:

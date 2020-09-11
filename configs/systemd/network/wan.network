@@ -1,0 +1,10 @@
+[Match]
+Name=en*
+Name=eth*
+
+[Network]
+DHCP=ipv4
+
+[DHCPv4]
+UseMTU=yes
+UseDNS=no
