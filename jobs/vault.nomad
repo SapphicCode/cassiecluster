@@ -6,7 +6,7 @@ job "vault" {
   group "vault" {
     task "vault" {
       driver = "docker"
-      
+
       config {
         image = "vault:1.5.3"
         args = ["vault", "server", "-config=${NOMAD_TASK_DIR}/vault.hcl"]
