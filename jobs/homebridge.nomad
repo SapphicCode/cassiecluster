@@ -2,7 +2,7 @@ job "homebridge" {
   datacenters = ["home"]
   type = "service"
 
-  group "homekit" {
+  group "homebridge" {
     task "homebridge" {
       driver = "docker"
       config {
@@ -20,22 +20,39 @@ job "homebridge" {
       }
       resources {
         cpu = 100
-        memory = 512
+        memory = 256
       }
     }
   }
 
   group "mqtt" {
+    service {
+      name = "mqtt"
+      port = "mqtt"
+      check {
+        type = "tcp"
+        port = "mqtt"
+        interval = "10s"
+        timeout = "2s"
+      }
+    }
+    network {
+      port "mqtt" {
+        static = 1883
+        to = 1883
+        host_network = "home"
+      }
+    }
     task "mosquitto" {
       driver = "docker"
       config {
         image = "eclipse-mosquitto:latest"
 
-        network_mode = "host"
+        ports = ["mqtt"]
       }
       resources {
-        cpu = 100
-        memory = 64
+        cpu = 20
+        memory = 32
       }
     }
   }
