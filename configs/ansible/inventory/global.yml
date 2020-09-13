@@ -2,6 +2,7 @@ all:
   vars:
     manager: no
     lighthouse: no
+    firewalled: yes
     dc: cloud
     tz: UTC
     bootstrap:
