@@ -1,0 +1,31 @@
+- hosts: all
+  become: yes
+  handlers:
+    - name: Restart fail2ban
+      systemd:
+        name: fail2ban
+        state: restarted
+  tasks:
+    - name: Install fail2ban
+      package:
+        name: fail2ban
+        state: present
+
+    - name: Configure fail2ban jails
+      copy:
+        src: ../configs/fail2ban/jails/
+        dest: /etc/fail2ban/jail.d/
+        mode: ug=rw,o=r
+      notify: Restart fail2ban
+    - name: Configure fail2ban Pushover notification
+      template:
+        src: ../configs/fail2ban/actions/pushover.conf.j2
+        dest: /etc/fail2ban/action.d/pushover.conf
+        mode: ug=rw,o=r
+      notify: Restart fail2ban
+
+    - name: Enable fail2ban
+      systemd:
+        name: fail2ban
+        enabled: yes
+        state: started

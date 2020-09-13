@@ -1,0 +1,15 @@
+[Definition]
+norestored = 1
+
+actionban = curl -s \
+  -F "token=<token>" \
+  -F "user=<user>" \
+  -F "priority=-1" \
+  -F "title=IP banned on <host>" \
+  -F "message=IP: <ip>. Failed <ipjailfailures> times." \
+  https://api.pushover.net/1/messages
+
+[Init]
+host  = "{{ ansible_nodename }}"
+token = "vault:v1:LIji/dVsdi5liZHlbDJCTisvPWtvanzNFXEOrepy8TP/dzbIxBTZPtJ3z2lrt0x0cdiBXlLr5KwzSg=="
+user = "vault:v1:+vxWK0y8bwv/t5YNIdUAz14mf8Ss/n2xJxAYvqg+/LniMPqiY7m2mnjDmGbLe1wl4Ni4LHhWaZzW6A=="
