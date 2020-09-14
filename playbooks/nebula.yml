@@ -1,0 +1,62 @@
+- import_playbook: dependencies.yml
+
+- hosts: all
+  become: yes
+  vars:
+    target_version: "1.2.0"
+  handlers:
+    - name: Restart Nebula
+      systemd:
+        name: nebula
+        state: restarted
+  tasks:
+    - name: Get Nebula version
+      command: nebula -version
+      register: version
+      changed_when: version.failed or target_version not in version.stdout
+      failed_when: no
+    - name: Update Nebula
+      when: version.changed
+      unarchive:
+        remote_src: yes
+        src: https://github.com/slackhq/nebula/releases/download/v{{ target_version }}/nebula-linux-{{ 'amd64' if ansible_architecture == 'x86_64' else ansible_architecture }}.tar.gz
+        dest: /usr/local/bin/
+
+    - name: Create /etc/nebula
+      file:
+        path: /etc/nebula
+        state: directory
+        mode: ug=rwx,o=rx
+
+    - name: Copy Nebula certificates
+      copy:
+        src: "{{ item }}"
+        dest: '/etc/nebula/{{ item.split("/")[-1].replace(ansible_nodename, "host") }}'
+        mode: u=rw
+      with_items:
+        - ../configs/nebula/ca.crt
+        - ../configs/nebula/{{ ansible_nodename }}.crt
+        - ../configs/nebula/{{ ansible_nodename }}.key
+      notify:
+        - Restart Nebula
+    - name: Template Nebula config
+      template:
+        src: ../configs/nebula/config.yml.j2
+        dest: /etc/nebula/config.yml
+        mode: ug=rw,o=r
+        validate: /usr/local/bin/nebula -test -config %s
+      notify:
+        - Restart Nebula
+
+    - name: Copy Nebula unit
+      copy:
+        src: ../configs/systemd/units/nebula.service
+        dest: /etc/systemd/system/
+        mode: ug=rw,o=r
+    - name: Enable Nebula
+      systemd:
+        name: nebula
+        enabled: yes
+        state: started
+
+- import_playbook: firewall.yml

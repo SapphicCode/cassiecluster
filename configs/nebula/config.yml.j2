@@ -1,0 +1,37 @@
+pki:
+  ca: /etc/nebula/ca.crt
+  cert: /etc/nebula/host.crt
+  key: /etc/nebula/host.key
+
+static_host_map:
+  "192.168.81.1": ["mistress.servers.pandentia.sys.qcx.io:4242"]
+
+lighthouse:
+  am_lighthouse: {{ lighthouse }}
+  interval: 60
+  hosts:
+{% if not lighthouse %}
+    - "192.168.81.1"
+{% endif %}
+
+listen:
+  host: 0.0.0.0
+  port: 4242
+
+punchy:
+  punch: true
+  respond: true
+
+tun:
+  dev: nebula1
+  mtu: 1300
+
+firewall:
+  outbound:
+    - port: any
+      proto: any
+      host: any
+  inbound: 
+    - port: any
+      proto: any
+      host: any
