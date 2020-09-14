@@ -1,1 +1,3 @@
 configs/nebula/*.key
+configs/ansible/inventory/inventory.yml
+__pycache__/

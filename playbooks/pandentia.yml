@@ -1,0 +1,19 @@
+- hosts: all
+  become: yes
+  become_user: pandentia
+  tasks:
+    - name: Install git
+      become_user: root
+      package:
+        name: git
+        state: present
+
+    - name: Pull dotfiles
+      git:
+        repo: https://github.com/SapphicCode/dotfiles.git
+        dest: /home/pandentia/.dotfiles
+    - name: Install authorized_hosts
+      get_url:
+        url: https://github.com/SapphicCode.keys
+        dest: /home/pandentia/.ssh/authorized_keys
+        mode: u=rw
