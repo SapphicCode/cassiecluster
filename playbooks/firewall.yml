@@ -1,0 +1,45 @@
+- hosts: all
+  become: yes
+  tasks:
+    - name: Ensure ufw is installed
+      package:
+        name: ufw
+        state: present
+
+    - name: Enable firewall
+      when: firewalled
+      block:
+        - name: Allow SSH and enable firewall
+          ufw:
+            rule: allow
+            direction: in
+            proto: tcp
+            to_port: "22"
+            state: enabled
+
+        - name: Apply Nebula rules
+          when: "'nebula1' in ansible_interfaces"
+          block:
+            - name: Allow Nebula inbound
+              ufw:
+                rule: allow
+                direction: in
+                proto: udp
+                to_port: "4242"
+            - name: Allow any from nebula1
+              ufw:
+                rule: allow
+                direction: in
+                interface: nebula1
+
+        - name: Allow any from docker0
+          when: "'docker0' in ansible_interfaces"
+          ufw:
+            rule: allow
+            direction: in
+            interface: docker0
+
+    - name: Disable firewall
+      when: not firewalled
+      ufw:
+        state: disabled
