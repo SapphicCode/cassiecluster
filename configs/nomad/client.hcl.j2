@@ -1,0 +1,25 @@
+client {
+  enabled = true
+  network_interface = "nebula1"
+  node_class = "worker"
+
+  host_network "public" {
+    cidr = "{{ ipify_public_ip }}/32"
+    reserved_ports = "22"
+  }
+  host_network "nebula" {
+    cidr = "192.168.81.0/24"
+    reserved_ports = "22"
+  }
+  host_network "home" {
+    cidr = "192.168.1.0/24"
+    reserved_ports = "22"
+  }
+}
+
+vault {
+  enabled = true
+  address = "http://vault.service.consul:8200"
+}
+
+datacenter = "{{ dc }}"

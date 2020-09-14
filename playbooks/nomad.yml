@@ -1,0 +1,64 @@
+- hosts: all
+  become: yes
+  vars:
+    target_version: "0.12.4"
+  handlers:
+    - name: Restart Nomad
+      systemd:
+        name: nomad
+        state: restarted
+  tasks:
+    - name: Get Nomad version
+      command: nomad version
+      register: version
+      changed_when: version.failed or target_version not in version.stdout
+      failed_when: no
+    - name: Update Nomad
+      when: version.changed
+      unarchive:
+        remote_src: yes
+        src: https://releases.hashicorp.com/nomad/{{ target_version }}/nomad_{{ target_version }}_linux_{{ 'amd64' if ansible_architecture == 'x86_64' else ansible_architecture }}.zip
+        dest: /usr/local/bin/
+      notify:
+        - Restart Nomad
+
+    - name: Get public network IP
+      ipify_facts:
+    - name: Copy Nomad general config
+      copy:
+        src: ../configs/nomad/general.hcl
+        dest: /etc/nomad.d/
+        mode: ug=rw,o=r
+    - name: Template Nomad client config
+      template:
+        src: ../configs/nomad/client.hcl.j2
+        dest: /etc/nomad.d/client.hcl
+        mode: ug=rw,o=r
+      notify:
+        - Restart Nomad
+    - name: Copy Nomad server config
+      when: manager
+      template:
+        src: ../configs/nomad/server.hcl
+        dest: /etc/nomad.d/
+        mode: ug=rw,o=r
+      notify:
+        - Restart Nomad
+    - name: Disable Nomad server config
+      when: not manager
+      file:
+        path: /etc/nomad.d/server.hcl
+        state: absent
+      notify:
+        - Restart Nomad
+
+    - name: Copy Nomad unit
+      copy:
+        src: ../configs/systemd/units/nomad.service
+        dest: /etc/systemd/system/
+        mode: ug=rw,o=r
+    - name: Enable Nomad
+      systemd:
+        name: nomad
+        enabled: yes
+        state: started
