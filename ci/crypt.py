@@ -5,7 +5,6 @@ import re
 import requests
 
 vault_regex = re.compile(r'vault:v\d+:[A-Za-z0-9+/=]+')
-# vault:v1:mSZflft5ZX2gsI4U7r+04l1/BWCu9gTsm5Tz2enBIrsX6n9b/P2/Td+aNEGCaUzXvFOR9PSpuuLz1LKkFVRwsCn1HvhOYlcLhQ==
 
 address = os.environ.get('VAULT_ADDR')
 token = os.environ.get('VAULT_TOKEN')

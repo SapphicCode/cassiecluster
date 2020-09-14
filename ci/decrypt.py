@@ -22,9 +22,12 @@ def decrypt_path(path: pathlib.Path):
 
 
 def decrypt_file(path: pathlib.Path):
-    with path.open('r') as f:
-        original = f.read()
-        newdata = original
+    try:
+        with path.open('r') as f:
+            original = f.read()
+            newdata = original
+    except UnicodeDecodeError:
+        return  # not a config file, clearly
 
     for match in vault_regex.finditer(newdata):
         secret = decrypt(match.group())
