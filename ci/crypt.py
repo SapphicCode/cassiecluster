@@ -4,7 +4,7 @@ import re
 
 import requests
 
-vault_regex = re.compile(r'vault:v\d+:[A-Za-z0-9+/=]+')
+vault_regex = re.compile(r'vault:v\d+:[A-Za-z0-9+/]+=*')
 
 address = os.environ.get('VAULT_ADDR')
 token = os.environ.get('VAULT_TOKEN')

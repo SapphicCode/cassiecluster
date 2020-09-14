@@ -4,3 +4,5 @@ configs/coredns/Corefile.j2
 configs/fail2ban/actions/pushover.conf.j2
 
 __pycache__/
+.vscode/*
+!vscode/settings.json
