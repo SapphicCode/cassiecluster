@@ -32,7 +32,7 @@
       copy:
         src: "{{ item }}"
         dest: '/etc/nebula/{{ item.split("/")[-1].replace(ansible_nodename, "host") }}'
-        mode: u=rw
+        mode: u=rw,go=
       with_items:
         - ../configs/nebula/ca.crt
         - ../configs/nebula/{{ ansible_nodename }}.crt
