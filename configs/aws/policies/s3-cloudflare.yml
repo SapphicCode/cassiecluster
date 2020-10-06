@@ -1,10 +1,10 @@
 Version: "2012-10-17"
 Statement:
-  - Sid: CloudflareReadAccess
+  - Sid: CloudflareRead
     Effect: Allow
     Principal: "*"
     Action: s3:GetObject
-    Resource: arn:aws:s3:::cassandra.beelen.one/*
+    Resource: arn:aws:s3:::${bucket}/*
     Condition:
       IpAddress:
         aws:SourceIp:
