@@ -32,8 +32,11 @@ resource "aws_s3_bucket" "static_site" {
 }
 
 resource "aws_s3_bucket_policy" "static_site" {
-  bucket = var.static_sites[count.index]
-  policy = jsonencode(yamldecode(templatefile("../configs/aws/policies/s3-cloudflare.yml", { bucket = var.static_sites[count.index] })))
+  bucket = aws_s3_bucket.static_site[count.index].bucket
+  policy = jsonencode(yamldecode(templatefile(
+    "../configs/aws/policies/s3-cloudflare.yml",
+    { bucket = aws_s3_bucket.static_site[count.index].bucket }
+  )))
 
-  count = length(var.static_sites)
+  count = length(aws_s3_bucket.static_site)
 }
