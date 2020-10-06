@@ -1,5 +1,7 @@
 provider "hcloud" {}
 
+// VPCs
+
 resource "hcloud_server" "mistress" {
   name        = "cassiepool-mistress"
   server_type = "cpx11"
@@ -22,4 +24,31 @@ resource "hcloud_server" "ns2" {
   lifecycle {
     ignore_changes = [image]
   }
+}
+
+// DNS
+
+locals {
+  instances = [
+    hcloud_server.mistress,
+    hcloud_server.db,
+    hcloud_server.ns2,
+  ]
+}
+
+resource "hcloud_rdns" "v4" {
+  server_id  = local.instances[count.index].id
+  ip_address = local.instances[count.index].ipv4_address
+  dns_ptr    = "${local.instances[count.index].name}.servers.pandentia.sys.qcx.io"
+
+  count = length(local.instances)
+}
+
+resource "cloudflare_record" "rdns_v4_hcloud" {
+  zone_id = cloudflare_zone.servers.id
+  type    = "A"
+  name    = local.instances[count.index].name
+  value   = local.instances[count.index].ipv4_address
+
+  count = length(local.instances)
 }
