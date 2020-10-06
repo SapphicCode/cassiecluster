@@ -15,8 +15,7 @@ variable "static_sites" {
   type = list(string)
   default = [
     "meta.qcx.io",
-    "cassandra.beelen.one",
-    "testbucket.qcx.io"
+    "cassandra.beelen.one"
   ]
 }
 
