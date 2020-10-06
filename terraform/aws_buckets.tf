@@ -35,8 +35,12 @@ resource "aws_s3_bucket" "archive" {
   bucket = "cassie-vault"
 
   lifecycle_rule {
-    enabled = true
+    enabled                                = true
     abort_incomplete_multipart_upload_days = 1
+
+    expiration {
+      days = 0 // Don't expire anything
+    }
   }
 
   server_side_encryption_configuration {
