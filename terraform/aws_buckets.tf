@@ -30,3 +30,20 @@ resource "aws_s3_bucket_policy" "static_site" {
 
   count = length(aws_s3_bucket.static_site)
 }
+
+resource "aws_s3_bucket" "archive" {
+  bucket = "cassie-vault"
+
+  lifecycle_rule {
+    enabled = true
+    abort_incomplete_multipart_upload_days = 1
+  }
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "AES256"
+      }
+    }
+  }
+}
