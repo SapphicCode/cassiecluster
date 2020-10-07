@@ -5,5 +5,11 @@ listener "tcp" {
 }
 
 storage "consul" {}
+seal "transit" {
+  address = "http://vault.service.consul:8200"
+  // token = $VAULT_TOKEN
+  mount_path = "transit/"
+  key_name = "vault"
+}
 
 ui = true
