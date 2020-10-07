@@ -6,7 +6,7 @@ listener "tcp" {
 
 storage "consul" {}
 seal "transit" {
-  address = "http://vault.service.consul:8200"
+  // address = $VAULT_ADDR
   // token = $VAULT_TOKEN
   mount_path = "transit/"
   key_name = "vault"
