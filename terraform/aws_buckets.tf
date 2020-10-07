@@ -1,7 +1,3 @@
-provider "aws" {
-  region = "eu-north-1"
-}
-
 variable "static_sites" {
   type = list(string)
   default = [

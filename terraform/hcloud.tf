@@ -1,5 +1,3 @@
-provider "hcloud" {}
-
 // VPCs
 
 resource "hcloud_server" "mistress" {

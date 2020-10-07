@@ -25,7 +25,44 @@ terraform {
       source  = "hashicorp/google"
       version = "~> 3.42"
     }
+    vault = {
+      source  = "hashicorp/vault"
+      version = "~> 2.14"
+    }
   }
 }
 
-provider "google" {}
+provider "vault" {}
+
+// instantiate providers with secrets from Vault
+data "vault_generic_secret" "aws" {
+  path = "terraform/aws"
+}
+provider "aws" {
+  access_key = vault_generic_secret.aws.data.access_key
+  secret_key = vault_generic_secret.aws.data.secret_key
+  region     = "eu-north-1"
+}
+
+data "vault_generic_secret" "google" {
+  path = "terraform/google"
+}
+provider "google" {
+  credentials = vault_generic_secret.google.data_json
+  project     = "sapphiclabs"
+  region      = "europe"
+}
+
+data "vault_generic_secret" "hcloud" {
+  path = "terraform/hcloud"
+}
+provider "hcloud" {
+  token = vault_generic_secret.hcloud.data.token
+}
+
+data "vault_generic_secret" "cloudflare" {
+  path = "terraform/cloudflare"
+}
+provider "cloudflare" {
+  api_token = vault_generic_secret.cloudflare.data.token
+}
