@@ -8,3 +8,18 @@ resource "google_kms_crypto_key" "vault" {
   name     = "vault"
   purpose  = "ENCRYPT_DECRYPT"
 }
+
+locals {
+  vault_roles = [
+    "roles/cloudkms.cryptoKeyEncrypterDecrypter",
+    "cloudkms.cryptoKeys.get",
+  ]
+}
+
+resource "google_kms_crypto_key_iam_member" "vault" {
+  crypto_key_id = google_kms_crypto_key.vault.id
+  role          = local.vault_roles[count.index]
+  member        = "serviceAccount:${google_service_account.vault.email}"
+
+  count = length(local.vault_roles)
+}
