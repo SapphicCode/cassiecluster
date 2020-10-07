@@ -12,7 +12,7 @@ resource "google_kms_crypto_key" "vault" {
 locals {
   vault_roles = [
     "roles/cloudkms.cryptoKeyEncrypterDecrypter",
-    "cloudkms.cryptoKeys.get",
+    "roles/viewer",
   ]
 }
 
