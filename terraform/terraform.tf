@@ -21,5 +21,11 @@ terraform {
       source  = "hetznercloud/hcloud"
       version = "~> 1.22"
     }
+    google = {
+      source  = "hashicorp/google"
+      version = "~> 3.42"
+    }
   }
 }
+
+provider "google" {}
