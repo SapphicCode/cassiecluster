@@ -54,7 +54,7 @@ resource "cloudflare_record" "alias_mistress" {
   zone_id = cloudflare_zone.servers.id
   type    = "CNAME"
   name    = "cassiepool-mistress"
-  value   = "mistress.@"
+  value   = "mistress.servers.pandentia.sys.qcx.io"
 }
 
 // v4
