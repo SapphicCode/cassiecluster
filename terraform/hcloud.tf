@@ -1,10 +1,24 @@
 // VPCs
 
+locals {
+  helsinki = {
+    dc = "fl-helsinki"
+    tz = "Europe_Helsinki"
+  }
+  nuremberg = {
+    dc = "de-nuremberg"
+    tz = "Europe_Berlin"
+  }
+}
+
 resource "hcloud_server" "mistress" {
   name        = "cassiepool-mistress"
   server_type = "cpx11"
   location    = "hel1"
   image       = "ubuntu-18.04" // ignore this, just the original image
+  labels = merge(local.helsinki, {
+    lighthouse = true
+  })
 }
 
 resource "hcloud_server" "db" {
@@ -12,6 +26,7 @@ resource "hcloud_server" "db" {
   server_type = "cpx11"
   location    = "hel1"
   image       = "ubuntu-20.04" // see above
+  labels      = local.helsinki
 }
 
 resource "hcloud_server" "ns2" {
@@ -19,6 +34,7 @@ resource "hcloud_server" "ns2" {
   server_type = "cx11"
   location    = "nbg1"
   image       = "ubuntu-20.04"
+  labels      = local.nuremberg
   lifecycle {
     ignore_changes = [image]
   }
