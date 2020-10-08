@@ -43,45 +43,45 @@ resource "hcloud_server" "ns2" {
 // DNS
 
 locals {
-  instances = [
-    hcloud_server.mistress,
-    hcloud_server.db,
-    hcloud_server.ns2,
-  ]
+  instances = {
+    "cassiepool-mistress" = hcloud_server.mistress,
+    cassiedb              = hcloud_server.db,
+    dns-ns2               = hcloud_server.ns2,
+  }
 }
 
 // v4
 resource "hcloud_rdns" "v4" {
-  server_id  = local.instances[count.index].id
-  ip_address = local.instances[count.index].ipv4_address
-  dns_ptr    = "${local.instances[count.index].name}.servers.pandentia.sys.qcx.io"
+  server_id  = each.value.id
+  ip_address = each.value.ipv4_address
+  dns_ptr    = "${each.key}.servers.pandentia.sys.qcx.io"
 
-  count = length(local.instances)
+  for_each = local.instances
 }
 
 resource "cloudflare_record" "rdns_v4_hcloud" {
   zone_id = cloudflare_zone.servers.id
   type    = "A"
-  name    = local.instances[count.index].name
-  value   = local.instances[count.index].ipv4_address
+  name    = each.key
+  value   = each.value.ipv4_address
 
-  count = length(local.instances)
+  for_each = local.instances
 }
 
 // v6
 resource "hcloud_rdns" "v6" {
-  server_id  = local.instances[count.index].id
-  ip_address = local.instances[count.index].ipv6_address
-  dns_ptr    = "${local.instances[count.index].name}.servers.pandentia.sys.qcx.io"
+  server_id  = each.value.id
+  ip_address = each.value.ipv6_address
+  dns_ptr    = "${each.key}.servers.pandentia.sys.qcx.io"
 
-  count = length(local.instances)
+  for_each = local.instances
 }
 
 resource "cloudflare_record" "rdns_v6_hcloud" {
   zone_id = cloudflare_zone.servers.id
   type    = "AAAA"
-  name    = local.instances[count.index].name
-  value   = local.instances[count.index].ipv6_address
+  name    = each.key
+  value   = each.value.ipv6_address
 
-  count = length(local.instances)
+  for_each = local.instances
 }
