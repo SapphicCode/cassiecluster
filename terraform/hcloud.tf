@@ -45,6 +45,7 @@ resource "hcloud_server" "ns2" {
 locals {
   instances = {
     "cassiepool-mistress" = hcloud_server.mistress,
+    mistress              = hcloud_server.mistress,
     cassiedb              = hcloud_server.db,
     dns-ns2               = hcloud_server.ns2,
   }
