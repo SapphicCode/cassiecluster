@@ -7,10 +7,10 @@ static_host_map:
   "192.168.81.1": ["mistress.servers.pandentia.sys.qcx.io:4242"]
 
 lighthouse:
-  am_lighthouse: {{ lighthouse }}
+  am_lighthouse: {{ lighthouse is defined }}
   interval: 60
   hosts:
-{% if not lighthouse %}
+{% if lighthouse is undefined %}
     - "192.168.81.1"
 {% endif %}
 

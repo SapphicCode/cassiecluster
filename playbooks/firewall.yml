@@ -1,13 +1,25 @@
 - hosts: all
   become: yes
   tasks:
+    - name: Prepare Fedora / CentOS
+      when: ansible_os_family == 'RedHat'
+      block:
+        - name: Ensure we don't conflict with firewalld
+          package:
+            name: firewalld
+            state: absent
+        - name: Ensure epel-release is installed
+          package:
+            name: epel-release
+            state: present
+
     - name: Ensure ufw is installed
       package:
         name: ufw
         state: present
 
     - name: Enable firewall
-      when: firewalled
+      when: no_firewall is undefined
       block:
         - name: Allow SSH and enable firewall
           ufw:
@@ -40,6 +52,6 @@
             interface: docker0
 
     - name: Disable firewall
-      when: not firewalled
+      when: no_firewall is defined
       ufw:
         state: disabled
