@@ -2,7 +2,7 @@ resource "digitalocean_droplet" "security" {
   name      = "security-gateway"
   region    = "ams3"
   size      = "s-1vcpu-1gb"
-  image     = "ubuntu-20-04-x86"
+  image     = "fedora-32-x64"
   user_data = file("../configs/cloud-init/cluster.yml")
 }
 
