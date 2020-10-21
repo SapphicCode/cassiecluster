@@ -1,0 +1,7 @@
+#cloud-config
+users:
+  - name: pandentia
+    gecos: Cassandra Beelen
+    ssh_import_id: gh:SapphicCode
+    sudo: ALL=(ALL) NOPASSWD:ALL
+ssh_pwauth: no
