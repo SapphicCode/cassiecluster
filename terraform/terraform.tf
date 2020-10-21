@@ -25,6 +25,10 @@ terraform {
       source  = "hashicorp/google"
       version = "~> 3.42"
     }
+    digitalocean = {
+      source  = "digitalocean/digitalocean"
+      version = "~> 2.0"
+    }
     vault = {
       source  = "hashicorp/vault"
       version = "~> 2.14"
@@ -65,4 +69,11 @@ data "vault_generic_secret" "cloudflare" {
 }
 provider "cloudflare" {
   api_token = data.vault_generic_secret.cloudflare.data.token
+}
+
+data "vault_generic_secret" "digitalocean" {
+  path = "terraform/digitalocean"
+}
+provider "digitalocean" {
+  token = data.vault_generic_secret.digitalocean.data.token
 }
