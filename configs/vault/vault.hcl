@@ -6,4 +6,8 @@ listener "tcp" {
 
 storage "consul" {}
 
+seal "gcpckms" {
+  disabled = "true"
+}
+
 ui = true
