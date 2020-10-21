@@ -4,7 +4,7 @@ job "vault" {
   datacenters = ["fi-helsinki"]
 
   group "vault" {
-    count = 2
+    count = 1
     spread {
       attribute = "${node.unique.id}"
     }
@@ -25,14 +25,6 @@ job "vault" {
 
       artifact {
         source = "git::https://github.com/Pandentia/cassiecluster.git//configs/vault"
-      }
-      env {
-        VAULT_SEAL_TYPE = "gcpckms"
-        VAULT_GCPCKMS_SEAL_KEY_RING = "cassiecluster"
-        VAULT_GCPCKMS_SEAL_CRYPTO_KEY = "vault"
-        GOOGLE_CREDENTIALS = "/vault.json"
-        GOOGLE_PROJECT = "sapphiclabs"
-        GOOGLE_REGION = "europe"
       }
 
       resources {
