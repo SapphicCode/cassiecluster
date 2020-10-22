@@ -1,9 +1,16 @@
+data "http" "ssh_cassandra" {
+  url = "https://github.com/SapphicCode.keys"
+}
+
 resource "digitalocean_droplet" "security" {
-  name      = "security-gateway"
-  region    = "ams3"
-  size      = "s-1vcpu-1gb"
-  image     = "fedora-32-x64"
-  user_data = file("../configs/cloud-init/cluster.yml")
+  name   = "security-gateway"
+  region = "ams3"
+  size   = "s-1vcpu-1gb"
+  image  = "fedora-32-x64"
+  user_data = templatefile(
+    "../configs/cloud-init/cluster.yml",
+    { keys = jsonencode(split("\n", trimspace(data.http.ssh_cassandra.body))) }
+  )
 }
 
 locals {

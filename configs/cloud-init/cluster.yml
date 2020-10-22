@@ -2,6 +2,9 @@
 users:
   - name: pandentia
     gecos: Cassandra Beelen
-    ssh_import_id: gh:SapphicCode
+    # doesn't work on Fedora, thanks cloud-init!
+    # ssh_import_id: gh:SapphicCode
+    ssh_authorized_keys: ${keys}
     sudo: ALL=(ALL) NOPASSWD:ALL
+
 ssh_pwauth: no
