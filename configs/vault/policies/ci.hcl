@@ -19,6 +19,6 @@ path "terraform/+" {
   capabilities = ["read"]
 }
 // Allow access to cluster secrets
-path "cassiecluster/+" {
+path "cassiecluster/*" {
   capabilities = ["read"]
 }
