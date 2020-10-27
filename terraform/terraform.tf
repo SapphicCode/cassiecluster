@@ -40,7 +40,21 @@ terraform {
   }
 }
 
-provider "vault" {}
+// authenticate to Vault
+variable "approle_id" {}
+variable "approle_secret" {}
+provider "vault" {
+  address = "https://vault.pandentia.qcx.io"
+
+  auth_login {
+    path = "auth/approle/login"
+
+    parameters = {
+      role_id   = var.approle_id
+      secret_id = var.approle_secret
+    }
+  }
+}
 
 // instantiate providers with secrets from Vault
 data "vault_generic_secret" "aws" {
