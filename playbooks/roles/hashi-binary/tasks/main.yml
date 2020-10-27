@@ -1,0 +1,13 @@
+- name: Get {{ binary | title }} version
+  command: "{{ binary }} version"
+  register: installed_version
+  changed_when: installed_version.failed or version not in installed_version.stdout
+  failed_when: no
+
+- name: Update {{ binary | title }}
+  when: installed_version.changed
+  unarchive:
+    remote_src: yes
+    src: https://releases.hashicorp.com/{{ binary }}/{{ version }}/{{ binary }}_{{ version }}_linux_{{ arch }}.zip
+    dest: /usr/local/bin/
+  notify: Restart {{ binary | title }}

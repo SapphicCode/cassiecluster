@@ -1,0 +1,5 @@
+- name: Install dependencies
+  include_tasks: deps.yml
+
+- name: Install vnStat
+  include_tasks: vnstat.yml

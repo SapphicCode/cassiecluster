@@ -1,0 +1,14 @@
+- name: Get Caddy version
+  command: caddy version
+  register: installed_version
+  changed_when: installed_version.failed or version not in installed_version.stdout
+  failed_when: no
+
+- name: Update Caddy
+  unarchive:
+    remote_src: yes
+    src: https://github.com/caddyserver/caddy/releases/download/v{{ version }}/caddy_{{ version }}_linux_amd64.tar.gz
+    dest: /usr/local/bin/
+    exclude:
+      - README.md
+  notify: Restart Caddy

@@ -1,0 +1,4 @@
+vault.pandentia.qcx.io {
+  header X-Clacks-Overhead "GNU Natalie Nguyen, Chloe Sagal, Leelah Alcorn"
+  reverse_proxy 127.0.0.1:8200
+}

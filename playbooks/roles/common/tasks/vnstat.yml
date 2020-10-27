@@ -1,0 +1,10 @@
+- name: Install vnStat
+  package:
+    name: vnstat
+    state: present
+
+- name: Enable vnStat
+  systemd:
+    name: vnstat
+    enabled: yes
+    state: started

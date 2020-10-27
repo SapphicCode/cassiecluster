@@ -1,0 +1,14 @@
+- name: Copy {{ unit | title }} unit
+  copy:
+    src: ../configs/systemd/units/{{ unit }}.service
+    dest: /etc/systemd/system/
+    mode: ug=rw,o=r
+- name: Enable {{ unit | title }}
+  systemd:
+    name: "{{ unit }}"
+    enabled: yes
+- name: Start {{ unit | title }}
+  when: no_start is undefined
+  systemd:
+    name: "{{ unit }}"
+    state: started

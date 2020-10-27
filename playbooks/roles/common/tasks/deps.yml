@@ -1,0 +1,18 @@
+- name: Install epel-release on CentOS
+  when: ansible_distribution == "CentOS"
+  dnf:
+    name: epel-release
+    state: present
+
+- name: Ensure curl is present
+  package:
+    name: curl
+    state: present
+- name: Ensure jq is present
+  package:
+    name: jq
+    state: present
+- name: Ensure unzip is present
+  package:
+    name: unzip
+    state: present

@@ -1,0 +1,39 @@
+- hosts: security
+  become: yes
+  tasks:
+    - name: Ensure Vault is installed with the correct version
+      include_role:
+        name: hashi-binary
+      vars:
+        binary: vault
+        version: "1.5.5"
+
+    - name: Install Caddy configured to host Vault
+      include_role:
+        name: caddy
+      vars:
+        version: "2.2.1"
+        config: ../configs/vault/Caddyfile
+
+    - name: Create /etc/vault.d
+      file:
+        path: /etc/vault.d
+        state: directory
+        mode: ug=rwx,o=rx
+    - name: Create /var/lib/vault
+      file:
+        path: /var/lib/vault
+        state: directory
+        mode: ug=rwx,o=
+
+    - name: Copy Vault configuration
+      copy:
+        src: ../configs/vault/vault.hcl
+        dest: /etc/vault.d/server.hcl
+        mode: ug=rw,o=r
+      notify: Restart Vault
+
+    - import_role:
+        name: systemd-unit
+      vars:
+        unit: vault

@@ -1,0 +1,11 @@
+- name: Create /etc/caddyfile
+  file:
+    path: /etc/caddy
+    state: directory
+    mode: ug=rwx,o=r
+- name: Copy config file
+  copy:
+    src: "{{ config }}"
+    dest: /etc/caddy/
+    mode: ug=rw,o=r
+  notify: Reload Caddy

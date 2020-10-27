@@ -1,0 +1,10 @@
+- name: Restart {{ unit | title }}
+  when: no_start is undefined
+  systemd:
+    name: "{{ unit }}"
+    state: restarted
+
+- name: Reload {{ unit | title }}
+  systemd:
+    name: "{{ unit }}"
+    state: reloaded

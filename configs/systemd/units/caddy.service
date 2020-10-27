@@ -1,0 +1,13 @@
+[Unit]
+Description=Caddy web server
+Documentation=https://caddyserver.com/docs/
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+ExecStart=/usr/local/bin/caddy run -config /etc/caddy/Caddyfile
+ExecReload=/usr/bin/kill -HUP $MAINPID
+KillSignal=SIGINT
+
+[Install]
+WantedBy=multi-user.target

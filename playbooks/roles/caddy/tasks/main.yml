@@ -1,0 +1,11 @@
+- name: Ensure Caddy is on the target version
+  import_tasks: update.yml
+
+- name: Configure Caddy
+  import_tasks: configure.yml
+
+- name: Install systemd unit
+  import_role:
+    name: systemd-unit
+  vars:
+    unit: caddy
