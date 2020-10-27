@@ -8,6 +8,10 @@ path "auth/token/create" {
 path "sys/policies/acl/+" {
   capabilities = ["create", "read", "update", "delete", "list"]
 }
+// Allow modification of approles
+path "auth/approle/role/+" {
+  capabilities = ["create", "read", "update", "delete"]
+}
 
 // Secrets:
 // Allow access to Terraform secrets
