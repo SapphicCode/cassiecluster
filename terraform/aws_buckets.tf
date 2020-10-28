@@ -39,7 +39,8 @@ resource "aws_s3_bucket" "archive" {
   }
 
   lifecycle_rule {
-    enabled                                = true
+    enabled = true
+
     abort_incomplete_multipart_upload_days = 1
   }
 
@@ -49,5 +50,19 @@ resource "aws_s3_bucket" "archive" {
         sse_algorithm = "AES256"
       }
     }
+  }
+}
+
+resource "aws_s3_bucket" "archive-media" {
+  bucket = "cassie-archive-media"
+
+  tags = {
+    type = "archive"
+  }
+
+  lifecycle_rule {
+    enabled = true
+
+    abort_incomplete_multipart_upload_days = 1
   }
 }
