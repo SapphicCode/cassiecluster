@@ -1,0 +1,13 @@
+- Sid: IAMAllowListBucket${bucket}
+  Effect: Allow
+  Resource: arn:aws:s3:::${bucket}
+  Action: s3:ListBucket
+
+- Sid: IAMAllowInteractBucket${bucket}
+  Effect: Allow
+  Resource: arn:aws:s3:::${bucket}/*
+  Action:
+    - S3:GetObject
+    - S3:PutObject
+    - S3:DeleteObject
+    - S3:RestoreObject
