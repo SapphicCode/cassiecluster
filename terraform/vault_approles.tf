@@ -4,6 +4,7 @@ resource "vault_approle_auth_backend_role" "terraform" {
 
   token_policies = [
     vault_policy.ci.name,
+    vault_policy.terraform.name,
   ]
   token_ttl = 30 * 60
 }
