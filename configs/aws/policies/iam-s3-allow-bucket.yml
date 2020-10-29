@@ -1,9 +1,9 @@
-- Sid: IAMAllowListBucket
+- Sid: IAMAllowListBucket${sha1(bucket)}
   Effect: Allow
   Resource: arn:aws:s3:::${bucket}
   Action: s3:ListBucket
 
-- Sid: IAMAllowInteractBucket
+- Sid: IAMAllowInteractBucket${sha1(bucket)}
   Effect: Allow
   Resource: arn:aws:s3:::${bucket}/*
   Action:

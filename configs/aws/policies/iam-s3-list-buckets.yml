@@ -1,0 +1,4 @@
+- Sid: IAMAllowListAllBuckets
+  Effect: Allow
+  Resource: "*"
+  Action: s3:ListAllMyBuckets

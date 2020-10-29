@@ -3,7 +3,7 @@ resource "aws_iam_user" "rclone" {
   path = "/cluster/"
 }
 
-resource "aws_iam_user_policy" "rclone-cassie-archive" {
+resource "aws_iam_user_policy" "rclone_cassie_archive" {
   user = aws_iam_user.rclone.name
 
   policy = jsonencode({
