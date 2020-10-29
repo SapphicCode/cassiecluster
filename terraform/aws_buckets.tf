@@ -76,13 +76,16 @@ resource "aws_s3_bucket" "archive" {
 resource "aws_s3_bucket" "archive-media" {
   bucket = "cassie-archive-media"
 
-  tags = {
-    type = "archive"
-  }
-
   lifecycle_rule {
     enabled = true
 
     abort_incomplete_multipart_upload_days = 1
   }
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = concat(
+      yamldecode(templatefile("../configs/aws/policies/s3/archive.yml", { bucket = "cassie-archive-media" }))
+    ),
+  })
 }
