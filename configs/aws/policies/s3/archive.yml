@@ -1,0 +1,9 @@
+- Sid: DenyNonGlacierPut
+  Effect: Deny
+  Principal: "*"
+  Resource: aws:s3:::${bucket}/*
+  Action: s3:PutObject
+  Condition:
+    StringNotEquals:
+      s3:x-amz-storage-class:
+        - DEEP_ARCHIVE

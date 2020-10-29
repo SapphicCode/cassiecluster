@@ -31,13 +31,13 @@ resource "aws_s3_bucket_policy" "static_site" {
   bucket = each.value.bucket
 
   policy = jsonencode(yamldecode(templatefile(
-    "../configs/aws/policies/s3-cloudflare.yml",
+    "../configs/aws/policies/s3/cloudflare.yml",
     {
       bucket = each.value.bucket,
-      ips = jsonencode(concat(
+      ips = concat(
         split("\n", trimspace(data.http.cloudflare_ipv4.body)),
         split("\n", trimspace(data.http.cloudflare_ipv6.body)),
-      )),
+      ),
     }
   )))
 
@@ -64,6 +64,13 @@ resource "aws_s3_bucket" "archive" {
       }
     }
   }
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = concat(
+      yamldecode(templatefile("../configs/aws/policies/s3/archive.yml", { bucket = "cassie-vault" }))
+    ),
+  })
 }
 
 resource "aws_s3_bucket" "archive-media" {

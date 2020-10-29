@@ -9,7 +9,7 @@ resource "aws_iam_user_policy" "rclone_cassie_archive" {
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = yamldecode(templatefile(
-      "../configs/aws/policies/iam-s3-allow-bucket.yml", { bucket = "cassie-archive*" }
+      "../configs/aws/policies/iam/s3/allow-bucket.yml", { bucket = "cassie-archive*" }
     )),
   })
 }

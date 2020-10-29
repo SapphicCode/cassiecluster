@@ -7,4 +7,4 @@ Statement:
     Resource: arn:aws:s3:::${bucket}/*
     Condition:
       IpAddress:
-        aws:SourceIp: ${ips}
+        aws:SourceIp: ${jsonencode(ips)}
