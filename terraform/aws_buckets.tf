@@ -73,7 +73,7 @@ resource "aws_s3_bucket" "archive" {
   })
 }
 
-resource "aws_s3_bucket" "archive-media" {
+resource "aws_s3_bucket" "archive_media" {
   bucket = "cassie-archive-media"
 
   lifecycle_rule {
