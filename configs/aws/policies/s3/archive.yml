@@ -1,7 +1,7 @@
 - Sid: DenyNonGlacierPut
   Effect: Deny
   Principal: "*"
-  Resource: aws:s3:::${bucket}/*
+  Resource: arn:aws:s3:::${bucket}/*
   Action: s3:PutObject
   Condition:
     StringNotEquals:
