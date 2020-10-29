@@ -1,3 +1,8 @@
+// Allow creation of sub-tokens
+path "auth/token/create" {
+  capabilities = ["update"]
+}
+
 // Allow modification of policies
 path "sys/policies/acl/+" {
   capabilities = ["create", "read", "update", "delete", "list"]
