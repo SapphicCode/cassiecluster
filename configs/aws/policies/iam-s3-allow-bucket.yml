@@ -3,6 +3,7 @@
   Resource: arn:aws:s3:::${bucket}
   Action:
     - s3:ListBucket
+    - s3:ListBucketVersions
     - s3:GetBucket*
     - s3:GetEncryptionConfiguration
     - s3:GetLifecycleConfiguration
