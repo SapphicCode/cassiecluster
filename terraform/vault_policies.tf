@@ -9,6 +9,6 @@ resource "vault_policy" "ci" {
 }
 
 resource "vault_policy" "terraform" {
-  name   = "terraform"
+  name   = "ci/terraform"
   policy = file("../configs/vault/policies/terraform.hcl")
 }
