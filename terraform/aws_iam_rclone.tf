@@ -18,11 +18,15 @@ resource "aws_iam_access_key" "rclone" {
   user = aws_iam_user.rclone.name
 }
 
-resource "vault_generic_secret" "rclone" {
-  path = "cassiecluster/rclone/aws"
+resource "vault_generic_secret" "rclone_glacier" {
+  path = "cassiecluster/rclone/glacier"
 
   data_json = jsonencode({
-    access_key_id = aws_iam_access_key.rclone.id,
-    secret_key    = aws_iam_access_key.rclone.secret,
+    type              = "s3",
+    provider          = "AWS",
+    region            = "eu-north-1",
+    storage_class     = "DEEP_ARCHIVE",
+    access_key_id     = aws_iam_access_key.rclone.id,
+    secret_access_key = aws_iam_access_key.rclone.secret,
   })
 }
