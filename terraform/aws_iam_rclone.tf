@@ -30,3 +30,12 @@ resource "vault_generic_secret" "rclone_glacier" {
     secret_access_key = aws_iam_access_key.rclone.secret,
   })
 }
+
+resource "vault_generic_secret" "rclone_alias_archive_media" {
+  path = "cassiecluster/rclone/media-archive"
+
+  data_json = jsonencode({
+    type   = "alias",
+    remote = format("s3:%s", aws_s3_bucket.archive_media.bucket),
+  })
+}
