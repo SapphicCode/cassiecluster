@@ -4,7 +4,7 @@ path "auth/token/create" {
 }
 
 // Allow modification of policies
-path "sys/policies/acl/+" {
+path "sys/policies/acl/*" {
   capabilities = ["create", "read", "update", "delete", "list"]
 }
 // Allow modification of approles
