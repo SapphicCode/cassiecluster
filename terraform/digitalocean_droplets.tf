@@ -3,15 +3,21 @@ data "http" "ssh_cassandra" {
 }
 
 resource "digitalocean_droplet" "security" {
-  name   = "security-gateway"
-  region = "ams3"
-  size   = "s-1vcpu-1gb"
-  image  = "fedora-32-x64"
+  name       = "security-gateway"
+  region     = "ams3"
+  size       = "s-1vcpu-1gb"
+  image      = "fedora-32-x64"
+  volume_ids = [digitalocean_volume.vault.id]
+
   user_data = templatefile(
     "../configs/cloud-init/cluster.yml",
     { keys = jsonencode(split("\n", trimspace(data.http.ssh_cassandra.body))) }
   )
-  volume_ids = [digitalocean_volume.vault.id]
+
+  // TODO: create stateless images in Packer where this is unnecessary
+  lifecycle {
+    ignore_changes = [user_data]
+  }
 }
 
 resource "digitalocean_volume" "vault" {

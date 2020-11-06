@@ -13,7 +13,7 @@ path "auth/approle/role/*" {
 }
 
 // Allow read access to Terraform secrets
-path "terraform/+" {
+path "terraform/data/*" {
   capabilities = ["read"]
 }
 // Allow write access to cluster secrets
