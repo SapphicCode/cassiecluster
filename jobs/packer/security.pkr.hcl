@@ -27,8 +27,8 @@ build {
   name = "security"
 
   sources = [
-    "hcloud.centos",
-    # "digitalocean.centos",
+    # "hcloud.centos",
+    "digitalocean.centos",
   ]
 
   provisioner "file" {
