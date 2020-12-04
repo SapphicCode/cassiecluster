@@ -1,23 +1,9 @@
-data "http" "ssh_cassandra" {
-  url = "https://github.com/SapphicCode.keys"
-}
-
 resource "digitalocean_droplet" "security" {
   name       = "security-gateway"
   region     = "ams3"
   size       = "s-1vcpu-1gb"
-  image      = "fedora-32-x64"
+  image      = "74585704"
   volume_ids = [digitalocean_volume.vault.id]
-
-  user_data = templatefile(
-    "../configs/cloud-init/cluster.yml",
-    { keys = jsonencode(split("\n", trimspace(data.http.ssh_cassandra.body))) }
-  )
-
-  // TODO: create stateless images in Packer where this is unnecessary
-  lifecycle {
-    ignore_changes = [user_data]
-  }
 }
 
 resource "digitalocean_volume" "vault" {
