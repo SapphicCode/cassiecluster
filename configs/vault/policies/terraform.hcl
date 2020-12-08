@@ -16,6 +16,9 @@ path "auth/approle/role/*" {
 path "terraform/data/*" {
   capabilities = ["read"]
 }
+path "cassandra/data/terraform" {
+  capabilities = ["read"]
+}
 // Allow write access to cluster secrets
 path "cassiecluster/*" {
   capabilities = ["create", "read", "update", "delete"]
