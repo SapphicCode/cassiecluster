@@ -19,7 +19,7 @@ path "terraform/data/*" {
 path "cassandra/data/terraform" {
   capabilities = ["read"]
 }
-path "aws/cassandra/creds/terraform" {
+path "aws/cassandra/sts/terraform" {
   capabilities = ["read"]
 }
 // Allow write access to cluster secrets
