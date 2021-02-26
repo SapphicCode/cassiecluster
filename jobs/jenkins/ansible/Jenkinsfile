@@ -18,6 +18,7 @@ pipeline {
 
         sh 'vault write -field=token auth/approle/login role_id=${VAULT_APPROLE_USR} secret_id=${VAULT_APPROLE_PSW} | vault login token=- > /dev/null'
         sh 'ci/decrypt.sh'
+        sh 'chmod u=rw,go= configs/openssh/id_ed25519'
       }
     }
   }
