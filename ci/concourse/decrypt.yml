@@ -8,7 +8,7 @@ platform: linux
 image_resource:
   type: registry-image
   source:
-    uri: sapphiccluster/concourse-deployer
+    repository: quay.io/sapphiccluster/concourse-deployer
 run:
   dir: cassiecluster
   path: ci/decrypt.sh
