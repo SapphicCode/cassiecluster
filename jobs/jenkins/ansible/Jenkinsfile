@@ -5,10 +5,18 @@ pipeline {
       dir 'jobs/jenkins/ansible'
     }
   }
+
+  environment {
+    VAULT_ADDR = credentials('vault_address')
+    VAULT_APPROLE = credentials('4bc81c9f-c9fa-474c-be80-9ede2ec35faf')
+  }
+
   stages {
     stage('Prepare build environment') {
       steps {
         checkout scm
+
+        sh 'vault write -field=token auth/approle/login role_id=${VAULT_APPROLE_USR} secret_id=${VAULT_APPROLE_PSW} | vault login token=- > /dev/null'
         sh 'ci/decrypt.sh'
       }
     }
