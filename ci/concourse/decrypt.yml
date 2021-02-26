@@ -1,9 +1,9 @@
 inputs:
   - name: cassiecluster
 params:
-  VAULT_ADDR: (( vault.address ))
-  VAULT_APPROLE_ROLE: (( approle.role_id ))
-  VAULT_APPROLE_SECRET: (( approle.secret_id ))
+  VAULT_ADDR: ((vault.address))
+  VAULT_APPROLE_ROLE: ((approle.role_id))
+  VAULT_APPROLE_SECRET: ((approle.secret_id))
 
 platform: linux
 image_resource:
