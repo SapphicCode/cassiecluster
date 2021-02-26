@@ -8,6 +8,7 @@ pipeline {
   stages {
     stage('Prepare build environment') {
       steps {
+        checkout scm
         sh 'ci/decrypt.sh'
       }
     }
