@@ -1,0 +1,17 @@
+inputs:
+  - name: cassiecluster
+params:
+  VAULT_APPROLE_ROLE: (( approle.role_id ))
+  VAULT_APPROLE_SECRET: (( approle.secret_id ))
+
+platform: linux
+image_resource:
+  type: registry-image
+  source:
+    uri: sapphiccluster/concourse-deployer
+run:
+  dir: cassiecluster
+  path: ci/decrypt.sh
+
+outputs:
+  - name: cassiecluster
