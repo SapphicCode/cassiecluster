@@ -2,6 +2,7 @@ configs/nebula/*.key
 configs/ansible/inventory/inventory.yml
 configs/coredns/Corefile.j2
 configs/fail2ban/actions/pushover.conf.j2
+configs/openssh/id_ed25519
 **/secrets.sh
 
 terraform/.terraform
