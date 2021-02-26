@@ -1,0 +1,15 @@
+pipeline {
+  agent {
+    // https://www.jenkins.io/doc/book/pipeline/syntax/#agent-parameters
+    dockerfile {
+      dir 'jobs/jenkins/ansible'
+    }
+  }
+  stages {
+    stage('Prepare build environment') {
+      steps {
+        sh 'ci/decrypt.sh'
+      }
+    }
+  }
+}
