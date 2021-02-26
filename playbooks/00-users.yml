@@ -1,0 +1,11 @@
+- hosts: all
+  become: yes
+  tasks:
+    - name: Create users
+      include_role:
+        name: users/{{ loop_user }}
+      loop:
+        - pandentia
+        - ci
+      loop_control:
+        loop_var: loop_user

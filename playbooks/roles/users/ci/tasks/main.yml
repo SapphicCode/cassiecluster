@@ -1,0 +1,31 @@
+- name: Create user
+  ansible.builtin.user:
+    name: automata
+    comment: Continuous Integration user
+    system: yes
+
+    create_home: yes
+    shell: /bin/bash
+  register: user
+
+- name: Create SSH directory
+  ansible.builtin.file:
+    state: directory
+    path: "{{ user.home }}/.ssh"
+    mode: u=rwx,go=
+    owner: "{{ user.name }}"
+    group: "{{ user.group }}"
+
+- name: Copy SSH key
+  ansible.builtin.copy:
+    src: ../configs/openssh/id_ed25519.pub
+    dest: "{{ user.home }}/.ssh/authorized_keys"
+    mode: u=rw,go=
+    owner: "{{ user.name }}"
+    group: "{{ user.group }}"
+
+- name: Create sudoers entry
+  ansible.builtin.copy:
+    src: ../configs/sudoers.d/automata
+    dest: /etc/sudoers.d/automata
+    mode: u=rw,go=

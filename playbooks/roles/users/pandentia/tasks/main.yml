@@ -1,0 +1,48 @@
+- name: Install fish
+  ansible.builtin.package:
+    name: fish
+    state: present
+
+- name: Create user
+  ansible.builtin.user:
+    name: pandentia
+    comment: Cassandra
+    system: no
+
+    create_home: yes
+    shell: /usr/bin/fish
+  register: user
+
+- name: Create .ssh directory
+  ansible.builtin.file:
+    state: directory
+    path: "{{ user.home }}/.ssh"
+    mode: u=rwx,go=
+    owner: "{{ user.name }}"
+    group: "{{ user.group }}"
+
+- name: Install authorized_hosts
+  ansible.builtin.get_url:
+    url: https://github.com/SapphicCode.keys
+    dest: "{{ user.home }}/.ssh/authorized_keys"
+    mode: u=rw,go=
+    owner: "{{ user.name }}"
+    group: "{{ user.group }}"
+
+- name: Get all groups
+  ansible.builtin.getent:
+    database: group
+    split: ":"
+
+- name: Add optional group
+  ansible.builtin.user:
+    name: "{{ user.name }}"
+    append: yes
+    groups: "{{ item }}"
+  when: item in ansible_facts.getent_group
+  with_items:
+    - wheel
+    - admin
+    - sudo
+    - adm
+    - docker
