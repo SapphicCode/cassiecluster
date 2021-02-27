@@ -11,4 +11,8 @@ for encrypted_file in **/*.transit; do
   vault write -field=plaintext transit/cluster/decrypt/automata "ciphertext=@${encrypted_file}" | base64 -d > "${plain_file}"
   touch --reference="${encrypted_file}" "${plain_file}"
   echo "${plain_file}"
+
+  if [ $(basename "${plain_file}") = "id_ed25519" ]; then
+    chmod u=rw,go= "${plain_file}"
+  fi
 done
