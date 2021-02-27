@@ -7,12 +7,12 @@ RUN curl --fail --silent https://releases.hashicorp.com/vault/${vault_version}/v
     unzip -d /usr/local/bin - && \
     chmod +x /usr/local/bin/*
 
-# Create user
-ARG uid="1000"
-RUN adduser -D \
-    -u ${uid} \
-    -h /work \
-    automata
-USER ${uid}
-WORKDIR /work
-ENTRYPOINT /bin/bash
+# # Create user
+# ARG uid="1000"
+# RUN adduser -D \
+#     -u ${uid} \
+#     -h /work \
+#     automata
+# USER ${uid}
+# WORKDIR /work
+# ENTRYPOINT /bin/bash
