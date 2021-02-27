@@ -24,7 +24,7 @@ jobs:
             path: "true"
 
   - name: ansible-play
-    max_in_flight: 1
+    serial: yes
     plan:
       - get: cassiecluster
         trigger: yes
@@ -34,7 +34,7 @@ jobs:
         file: cassiecluster/ci/concourse/ansible.yml
 
   - name: pipeline
-    max_in_flight: 1
+    serial: yes
     plan:
       - get: cassiecluster
         trigger: yes
