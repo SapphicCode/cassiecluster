@@ -1,0 +1,42 @@
+resources:
+  - name: cassiecluster
+    icon: github
+    type: git
+    source:
+      uri: https://github.com/SapphicCode/cassiecluster.git
+      branch: mistress
+
+jobs:
+  - name: aura-clicky-button
+    public: yes
+    max_in_flight: 4
+    plan:
+      - get: cassiecluster
+        trigger: yes
+      - task: boop
+        config:
+          platform: linux
+          image_resource:
+            type: registry-image
+            source:
+              repository: docker.io/library/alpine
+          run:
+            path: "true"
+
+  - name: ansible-play
+    max_in_flight: 1
+    plan:
+      - get: cassiecluster
+        trigger: yes
+      - task: decrypt
+        file: cassiecluster/ci/concourse/decrypt.yml
+      - task: ansible
+        file: cassiecluster/ci/concourse/ansible.yml
+
+  - name: pipeline
+    max_in_flight: 1
+    plan:
+      - get: cassiecluster
+        trigger: yes
+      - set_pipeline: self
+        file: cassiecluster/ci/concourse/pipeline.yml
