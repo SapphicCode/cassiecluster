@@ -1,0 +1,26 @@
+- name: Check installed version
+  command: restic version
+  register: installed_version
+  changed_when: installed_version.failed or version not in installed_version.stdout
+  failed_when: no
+
+- name: Update restic
+  when: installed_version.changed
+  block:
+    - name: Download restic
+      ansible.builtin.get_url:
+        url: https://github.com/restic/restic/releases/download/v{{ version }}/restic_{{ version }}_linux_amd64.bz2
+        dest: /usr/local/bin/restic.bz2
+
+    - name: Decompress restic
+      ansible.builtin.command:
+        cmd: bunzip2 -f /usr/local/bin/restic.bz2
+        removes: /usr/local/bin/restic.bz2
+
+    - name: Make restic executable
+      ansible.builtin.file:
+        state: file
+        path: /usr/local/bin/restic
+        mode: u=rwx,go=rx
+        owner: root
+        group: root

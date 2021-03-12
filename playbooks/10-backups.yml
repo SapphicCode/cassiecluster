@@ -1,0 +1,31 @@
+- hosts: mistress.* cassiedb.*
+  become: yes
+  tasks:
+    - name: Ensure restic is installed
+      ansible.builtin.include_role:
+        name: restic
+
+    - name: Copy backup script
+      ansible.builtin.copy:
+        src: ../scripts/backup/backup.sh
+        dest: /usr/local/bin/
+        mode: u=rwx,go=
+        owner: root
+        group: root
+
+    - name: Copy systemd units
+      ansible.builtin.copy:
+        src: ../configs/systemd/units/{{ item }}
+        dest: /etc/systemd/system/
+        mode: u=rwx,go=
+        owner: root
+        group: root
+      with_items:
+        - restic.service
+        - restic.timer
+
+    - name: Enable systemd timer
+      ansible.builtin.systemd:
+        name: restic.timer
+        enabled: yes
+        state: started
