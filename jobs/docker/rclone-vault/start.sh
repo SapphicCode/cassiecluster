@@ -14,7 +14,7 @@ vault_request() {
 }
 
 # authenticate
-auth=$(vault_request auth/approle/login "{\"role_id\": \"${VAULT_APPROLE_ID}\", \"secret_id\": \"${VAULT_APPROLE_SECRET}\"}")
+auth=$(vault_request POST auth/approle/login "{\"role_id\": \"${VAULT_APPROLE_ID}\", \"secret_id\": \"${VAULT_APPROLE_SECRET}\"}")
 VAULT_TOKEN=$(echo "${auth}" | jq .auth.client_token)
 export VAULT_TOKEN
 
