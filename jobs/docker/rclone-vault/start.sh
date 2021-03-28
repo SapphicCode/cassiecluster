@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -eux
+set -eu
 
 export RCLONE_CONFIG=/tmp/rclone.conf
 
@@ -15,7 +15,7 @@ vault_request() {
 
 # authenticate
 auth=$(vault_request POST auth/approle/login "{\"role_id\": \"${VAULT_APPROLE_ID}\", \"secret_id\": \"${VAULT_APPROLE_SECRET}\"}")
-VAULT_TOKEN=$(echo "${auth}" | jq .auth.client_token)
+VAULT_TOKEN=$(echo "${auth}" | jq -r .auth.client_token)
 export VAULT_TOKEN
 
 # fetch remotes
