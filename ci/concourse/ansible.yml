@@ -14,3 +14,4 @@ run:
   path: ansible-playbook
   args:
     - playbooks/00-users.yml
+    - playbooks/10-backups.yml

@@ -4,6 +4,7 @@ params:
   VAULT_ADDR: ((vault.address))
   VAULT_APPROLE_ROLE: ((approle.role_id))
   VAULT_APPROLE_SECRET: ((approle.secret_id))
+  SOPS_VAULT_URIS: ((sops.transit_url))
 
 platform: linux
 image_resource:

@@ -1,7 +1,7 @@
 FROM docker.io/library/alpine:latest
 
 # Install dependencies
-RUN apk add --no-cache coreutils bash curl jq git ansible openssh-client
+RUN apk add --no-cache coreutils bash curl jq git ansible openssh-client make
 
 ARG vault_version="1.6.3"
 RUN curl --fail --silent https://releases.hashicorp.com/vault/${vault_version}/vault_${vault_version}_linux_amd64.zip | \
