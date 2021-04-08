@@ -1,4 +1,4 @@
-- hosts: mistress.* cassiedb.*
+- hosts: cassiepool-mistress cassiedb
   become: yes
   tasks:
     - name: Ensure restic is installed
