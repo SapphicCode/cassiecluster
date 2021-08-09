@@ -25,6 +25,7 @@ jobs:
       - put: builder
         params:
           image: builder/image.tar
+          tag: latest
 
   - name: ansible-play
     serial: yes
