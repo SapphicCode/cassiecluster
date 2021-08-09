@@ -7,22 +7,6 @@ resources:
       branch: mistress
 
 jobs:
-  - name: aura-clicky-button
-    public: yes
-    max_in_flight: 4
-    plan:
-      - get: cassiecluster
-        trigger: yes
-      - task: boop
-        config:
-          platform: linux
-          image_resource:
-            type: registry-image
-            source:
-              repository: docker.io/library/alpine
-          run:
-            path: "true"
-
   - name: ansible-play
     serial: yes
     plan:
