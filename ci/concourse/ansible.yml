@@ -1,7 +1,9 @@
 inputs:
   - name: cassiecluster
 params:
-  ANSIBLE_CONFIG: configs/ansible/ansible.cfg
+  VAULT_ADDR: ((vault.address))
+  VAULT_APPROLE_ROLE: ((vault.approle.role))
+  VAULT_APPROLE_SECRET: ((vault.approle.secret))
 
 platform: linux
 
@@ -9,9 +11,11 @@ image_resource:
   type: registry-image
   source:
     repository: quay.io/sapphiccluster/concourse-deployer
+
 run:
   dir: cassiecluster
-  path: ansible-playbook
+  path: make
   args:
-    - playbooks/00-users.yml
-    - playbooks/10-backups.yml
+    - login
+    - decrypt
+    - ansible
