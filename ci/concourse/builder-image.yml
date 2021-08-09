@@ -1,0 +1,18 @@
+platform: linux
+image_resource:
+  type: registry-image
+  source:
+    repository: concourse/oci-build-task
+run:
+  path: build
+
+inputs:
+  - name: cassiecluster
+outputs:
+  - name: builder
+    path: image
+caches:
+  - path: cache
+
+params:
+  CONTEXT: cassiecluster/ci
