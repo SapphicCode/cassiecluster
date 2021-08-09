@@ -34,9 +34,7 @@ jobs:
     plan:
       - get: cassiecluster
         trigger: yes
-      - get: builder
-      - task: decrypt
-        file: cassiecluster/ci/concourse/decrypt.yml
+        passed: [builder-image]
       - task: ansible
         file: cassiecluster/ci/concourse/ansible.yml
 
