@@ -21,7 +21,7 @@ jobs:
         trigger: yes
       - task: build
         privileged: yes
-        file: cassiecluster/ci/concourse/image-builder.yml
+        file: cassiecluster/ci/concourse/builder-image.yml
       - put: builder
         image: builder/image.tar
 
