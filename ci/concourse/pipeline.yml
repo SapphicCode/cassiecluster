@@ -5,13 +5,36 @@ resources:
     source:
       uri: https://github.com/SapphicCode/cassiecluster.git
       branch: mistress
+  - name: builder
+    icon: docker
+    type: registry-image
+    source:
+      repository: quay.io/sapphiccluster/concourse-deployer
+      tag: latest
+      username: ((quay.user))
+      password: ((quay.pass))
 
 jobs:
+  - name: builder-image
+    serial: yes
+    plan:
+      - get: cassiecluster
+        trigger: yes
+      - task: build
+        privileged: yes
+        file: cassiecluster/ci/concourse/builder-image.yml
+      - put: builder
+        params:
+          image: builder/image.tar
+        get_params:
+          skip_download: true
+
   - name: ansible-play
     serial: yes
     plan:
       - get: cassiecluster
         trigger: yes
+      - get: builder
       - task: decrypt
         file: cassiecluster/ci/concourse/decrypt.yml
       - task: ansible
