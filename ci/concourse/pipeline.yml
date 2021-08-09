@@ -26,6 +26,8 @@ jobs:
       - put: builder
         params:
           image: builder/image.tar
+        get_params:
+          skip_download: true
 
   - name: ansible-play
     serial: yes
