@@ -23,7 +23,8 @@ jobs:
         privileged: yes
         file: cassiecluster/ci/concourse/builder-image.yml
       - put: builder
-        image: builder/image.tar
+        params:
+          image: builder/image.tar
 
   - name: ansible-play
     serial: yes
