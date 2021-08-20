@@ -1,0 +1,8 @@
+Port 22
+AddressFamily any
+ListenAddress 0.0.0.0
+ListenAddress ::
+
+AuthenticationMethods publickey
+
+AllowTcpForwarding yes  # alpine edge-case

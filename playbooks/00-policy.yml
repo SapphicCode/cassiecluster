@@ -1,0 +1,11 @@
+- hosts: all
+  become: yes
+  tasks:
+    - name: Configure sshd
+      ansible.builtin.copy:
+        src: ../configs/openssh/sshd_config
+        dest: /etc/ssh/sshd_config
+        backup: yes
+        mode: u=rw,go=r
+        owner: root
+        group: root
