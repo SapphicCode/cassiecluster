@@ -10,7 +10,7 @@ decrypt:
 	sops -d secrets/ansible/cassandra.hcloud.yml > configs/ansible/inventory/cassandra.hcloud.yml
 
 ansible:
-	ansible-galaxy collection install hetzner.hcloud
+	ansible-galaxy collection install community.general hetzner.hcloud
 	ansible-playbook playbooks/*-*.yml
 
 all:

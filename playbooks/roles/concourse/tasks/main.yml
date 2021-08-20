@@ -1,0 +1,29 @@
+- name: Get local Concourse version
+  ansible.builtin.command: concourse --version
+  register: installed_version
+  changed_when: installed_version.failed or version not in installed_version.stdout
+  failed_when: no
+
+- name: Get remote Concourse version
+  when: version is not defined
+  community.general.github_release:
+    action: latest_release
+    user: concourse
+    repository: concourse
+  register: version
+
+- block: Install Concourse
+  when: "{{version}} != v{{installed_version}}"
+    - name: Download the Concourse package
+      ansible.builtin.unarchive:
+        src: https://github.com/concourse/concourse/releases/download/{{version}}/concourse-{{version[1:]}}-linux-amd64.tgz
+        dest: /tmp/concourse
+        remote_src: yes
+        mode: u=rwx,go=rx
+        owner: root
+        group: root
+    - name: Install all the binaries
+      ansible.builtin.shell: mv -vf /tmp/concourse/bin/* /usr/local/bin/
+    - name: Delete the Concourse package
+      ansible.builtin.shell: rm -rf /tmp/concourse
+  notify: Restart Concourse
