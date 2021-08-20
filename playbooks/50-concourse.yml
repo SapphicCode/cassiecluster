@@ -1,0 +1,4 @@
+- hosts: concourse-*
+  become: yes
+  ansible.builtin.include_role:
+    name: concourse
