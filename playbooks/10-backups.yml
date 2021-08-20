@@ -1,6 +1,12 @@
 - hosts: cassiepool-mistress cassiedb
   become: yes
   tasks:
+    - name: Get latest restic version
+      community.general.github_releases:
+        action: latest_release
+        user: restic
+        repository: restic
+
     - name: Ensure restic is installed
       ansible.builtin.include_role:
         name: restic
@@ -17,7 +23,7 @@
       ansible.builtin.copy:
         src: ../configs/systemd/units/{{ item }}
         dest: /etc/systemd/system/
-        mode: u=rwx,go=
+        mode: u=rw,go=r
         owner: root
         group: root
       with_items:
